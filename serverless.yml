@@ -1,0 +1,27 @@
+service: codegolf-lambda
+
+frameworkVersion: ">=1.2.0 <2.0.0"
+
+provider:
+  name: aws
+  runtime: java8
+  stage: dev
+  region: eu-central-1
+  memorySize: 2048
+  timeout: 10
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:GetObject
+      Resource: "arn:aws:s3:::*/*"
+
+package:
+  artifact: target/${self:service}.jar
+
+functions:
+  run:
+    handler: dasniko.codegolf.CodeGolfHandler
+    events:
+      - http:
+          path: codegolf
+          method: post
